@@ -1,3 +1,4 @@
+HEAD
 # Assignment 3. Maze Escape
 
 Student ID: 252678
@@ -81,3 +82,6 @@ Kruskal is faster for the 300 x 300 and 1000 x 1000 mazes. Prim is slightly fast
 - This README is filled in, the program output and the section AI use included.
 - The work is pushed to main (at least one commit per mission) and the repository is public.
 - The link is attached in Moodle.
+
+# daa3
+ 9218cbd24d5ceb4539e19c7097e4384e616a1a7a
