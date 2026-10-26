@@ -33,23 +33,26 @@ My maze:file:///C:/Users/user/Downloads/maze-escape-starter%20A3w7/maze-escape/o
 ## Questions
 
 Mission 0. What do find and union do, and what makes them fast in your code?
-DSU helps us find which cells belong to the same group. It can join two groups and check if two cells are connected
+find(x) finds the leader of the group containing cell x. union(a, b) joins two different groups and returns true. If the cells are already in the same group, it returns false. My DSU uses union by size, so the smaller group joins the larger group. It also uses path compression (path halving) to make future find operations faster.
 
 Mission 1. Why is Broken always R*C - 1, and Kept always (R-1)*(C-1)?
-The program reads the walls from the input file. It checks the walls and builds the maze
+There are R*C cells. The maze must connect all cells without cycles, so it is a tree. A tree with N vertices has exactly N-1 edges. That is why the program breaks R*C - 1 walls.
 
 Mission 2. My MST cost from Kruskal and from Prim, and why they are equal:
-Kruskal's algorithm builds a minimum spanning tree. It chooses edges with low costs and avoids cycles
+The MST cost reported by Kruskal is 27238. Prim should also return 27238 for the same connected graph; this should be confirmed by running the program or its tests. Kruskal sorts the walls by cost and uses DSU to avoid cycles. Prim starts from one cell and uses a priority queue to choose the cheapest edge to a new cell. Both algorithms find an MST, so their total costs are equal.
 
 Mission 3. Why is there exactly one path between two cells? How did you avoid a stack overflow on a huge maze?
-Prim's algorithm also builds a minimum spanning tree. It starts from one vertex and adds the next best edge
+Mission 1 makes a connected maze without cycles, so the maze is a tree. In a tree, there is exactly one simple path between any two cells. I use iterative DFS with arrays as a stack instead of recursive DFS. This avoids a deep Java call stack and helps prevent StackOverflowError in a large maze. DFS checks directions in this order: up, right, down, left.
 
 Mission 4. Why does the second pass of Kosaraju go on the reversed graph? Why do the slides have no cycle exactly when Zones equals the number of cells?
-DFS visits the cells in the maze. The program uses an iterative version of DFS to avoid problems with deep recursion
+Kosaraju uses two DFS passes. The first pass records the order in which vertices finish. The second pass processes vertices in reverse finishing order on the reversed graph. This helps find each strongly connected component without mixing different components.
+
+A directed cycle of two or more cells would put those cells in the same SCC. The input also has no slides from a cell to itself. So, if every cell is its own zone, there are no directed cycles and the slides graph is a DAG. My result is 88 zones for 88 cells, so Is DAG is 1.
 
 Mission 5. Why is it enough to go through the zones in the order of their numbers? What does this pass cost?
-Kosaraju's algorithm finds strongly connected components in a directed graph. These are groups of vertices that can reach each other
+After Kosaraju, each SCC becomes one zone. The graph of zones has no directed cycles, and the zone numbers are in topological order. This means an edge between different zones goes from an earlier zone to a later one. I can process zones in number order to update the longest chain and the shortest travel time.
 
+In my current routes() code, I scan all S slides for each of the Z zones. The two passes therefore take O(Z*S) time and use O(Z) extra space, not counting the input and zoneOf array. A version with adjacency lists for the zone graph could run in O(Z+S) time.
 
 ## AI use
 
